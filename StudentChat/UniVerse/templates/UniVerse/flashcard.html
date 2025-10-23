@@ -1,0 +1,358 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chats</title>
+    <style>
+ 
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            padding: 12px 30px;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #121212;
+            color: #e0e0e0;
+            width: 96.5%; /* Stretch across the screen */
+            position: fixed; /* Optional: Sticks to the top */
+            top: 0; /* Keep it at the top of the viewport */
+            left: 0; /* Ensure it starts from the left edge */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left Section (Website name) */
+        .website-name {
+            font-size: 20px;
+            font-weight: 600;
+            align-items: center;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Center Section (Tabs) */
+        .nav-tabs {
+            display: flex;
+            gap: 30px; /* Space between tabs */
+            justify-content: center; /* Centers the nav tabs horizontally */
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .current-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            background-color: #142887; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-tab:hover {
+            background-color: #142887; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Profile Section Styling */
+        .profile {
+            display: flex;
+            cursor: pointer;
+            margin-left: 60px;
+            align-items: center;
+        }
+
+        /* Profile Picture Styling */
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);  /* Slight zoom-in effect */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+        }
+
+        /* Container for friend list */
+        .subject-list {
+            display: flex;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 500px; /* Full height of the viewport */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        /* Hide the scrollbar */
+        .subject-list::-webkit-scrollbar {
+            display: none; /* For WebKit browsers like Chrome and Safari */
+        }
+        
+        /* Individual friend sections */
+        subjectsection {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 5px 10px;
+            width: 275px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+        }
+        
+        subjectsection:hover {
+            background-color: #292929; /* Lighter gray on hover */
+        }
+        
+        /* Friend Name and Message Styling */
+        subjectsection p {
+            font-size: 16px;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .subject-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: -22px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 50px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .leaderboard-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 65px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 60px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .dropdown-button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 5px;
+            position: absolute;
+            margin-left: 265px;
+        }
+
+        .dropdown-content {
+            display: none;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 100%; /* Automatically adjust height based on content */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        .dropdown-content-leaderboard {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 20px 15px;
+            width: 265px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+            font-size: 20px;
+        }
+
+        .dropdown-content-leaderboard:hover {
+            background-color: #292929;
+        }
+
+
+        .dropdown-button:hover {
+            background-color: #292929;
+        }
+
+        .dropdown-content-active{
+            display: flex;
+            max-height: 550px; /* Adjust as needed for dropdown content size */
+            opacity: 1;
+        }
+
+        .dropdown-button-active {
+            background-color: #292929;
+        }
+
+        .message-box {
+            position: fixed;
+            right: 40px;
+            top: 97px;
+            background-color: rgb(10, 19, 48);
+            width: 100%;
+            max-width: 915px;
+            height: calc(100vh - 170px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .message{
+            display: flex;
+            flex-direction: column;
+            font-size: 50px;
+            justify-content: center;
+            align-items: center;
+            font-family: 'DejaVu Sans Mono', monospace;
+            color: rgb(241, 243, 250);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Left: Website Name -->
+        <div class="website-name">UniVerse</div>
+
+        <!-- Center: Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="/chats" class="nav-tab">Chats</a>
+            <a href="/flashcard" class="current-tab">Flashcard</a>
+            <a href="/classes" class="nav-tab">Classes</a>
+        </nav>
+
+        <!-- Right: Profile Picture -->
+        <div class="profile" onclick="window.location.href='/account'">
+            <img src="{% static 'UniVerse/face.png' %}" alt="Profile Picture"> <!-- Replace with your image URL -->
+        </div>
+
+    </header>
+    
+    <main>
+
+        <!-- Dropdown leaderboard options -->
+        <p class="leaderboard-title">
+            Leaderboards
+            <button class="dropdown-button">▼</button>
+            <div class="dropdown-content">
+                <a href="/leaderboards/1" class="dropdown-content-leaderboard" style="color:white;">
+                    All time
+                </a>
+                <a href="/leaderboards/2" class="dropdown-content-leaderboard" style="color:white;">
+                    This month
+                </a>
+                <a href="/leaderboards/3" class="dropdown-content-leaderboard" style="color:white;">
+                    This week
+                </a>
+            </div>
+        </p>
+
+        <!-- Subject list -->
+        <p class="subject-title">Subjects</p>
+        <div class="subject-list">
+            {% for subject in subjects %}
+            
+                <a href="/flashcardmode/{{ subject }}">
+                    <subjectsection>
+                        <p> {{ subject }} </p>
+                    </subjectsection>
+                </a>
+
+            {% endfor %}
+        </div>
+
+        <div class="message-box">
+            <div class="message">Flashcards</div>
+        </div>
+        
+    </main>
+
+    <script>
+        var dropdownButton = document.querySelector('.dropdown-button');
+        var dropdownContent = document.querySelector('.dropdown-content');
+        var subjectList = document.querySelector('.subject-list');
+        var subjectTitle = document.querySelector('.subject-title');
+
+        dropdownButton.addEventListener('click', function(){
+            dropdownContent.classList.toggle('dropdown-content-active');
+            dropdownButton.classList.toggle('dropdown-button-active');
+
+            if (dropdownContent.classList.contains('dropdown-content-active')) {
+                // Hide the friend list and friend title when dropdown is shown
+                subjectList.style.display = 'none';
+                subjectTitle.style.display = 'none';
+            } else {
+                // Show the friend list and friend title when dropdown is hidden
+                subjectList.style.display = 'flex';
+                subjectTitle.style.display = 'flex';
+            }
+        
+        });
+    </script>
+
+</body>
+</html>

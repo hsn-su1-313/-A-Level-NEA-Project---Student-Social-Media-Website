@@ -1,0 +1,670 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chats</title>
+    <style>
+ 
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            padding: 12px 30px;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #121212;
+            color: #e0e0e0;
+            width: 96.5%; /* Stretch across the screen */
+            position: fixed; /* Optional: Sticks to the top */
+            top: 0; /* Keep it at the top of the viewport */
+            left: 0; /* Ensure it starts from the left edge */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left Section (Website name) */
+        .website-name {
+            font-size: 20px;
+            font-weight: 600;
+            align-items: center;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Center Section (Tabs) */
+        .nav-tabs {
+            display: flex;
+            gap: 30px; /* Space between tabs */
+            justify-content: center; /* Centers the nav tabs horizontally */
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .current-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            background-color: #142887; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-tab:hover {
+            background-color: #142887; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Profile Section Styling */
+        .profile {
+            display: flex;
+            cursor: pointer;
+            margin-left: 60px;
+            align-items: center;
+        }
+
+        /* Profile Picture Styling */
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);  /* Slight zoom-in effect */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+        }
+
+        /* Container for friend list */
+        .friend-list {
+            display: flex;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 500px; /* Full height of the viewport */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        /* Hide the scrollbar */
+        .friend-list::-webkit-scrollbar {
+            display: none; /* For WebKit browsers like Chrome and Safari */
+        }
+        
+        /* Individual friend sections */
+        friendsection {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 10px;
+            width: 275px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+        }
+        
+        friendsection:hover {
+            background-color: #292929; /* Lighter gray on hover */
+        }
+        
+        /* Profile Image Styling */
+        friendsection img {
+            border-width: 2.5px;
+            border-color: #7289da; /* Accent color for profile picture border */
+            border-style: solid;
+            border-radius: 50%;
+            width: 50px; /* Larger profile image */
+            height: 50px;
+            background-color: #121212;
+        }
+        
+        /* Friend Name and Message Styling */
+        friendsection p {
+            font-size: 16px;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        /* Chat box container */
+        .chat-box {
+            position: fixed;
+            right: 40px;
+            top: 97px;
+            background-color: rgb(10, 19, 48);
+            width: 100%;
+            max-width: 915px;
+            height: calc(100vh - 170px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .StartAChat{
+            display: flex;
+            flex-direction: column;
+            font-size: 50px;
+            justify-content: center;
+            align-items: center;
+            font-family: 'DejaVu Sans Mono', monospace;
+            color: rgb(241, 243, 250);
+        }
+
+        .friend-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: -22px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 50px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .friend-request-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 65px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 60px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .dropdown-button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 5px;
+            position: absolute;
+            margin-left: 265px;
+        }
+
+        .dropdown-content {
+            display: none;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 100%; /* Automatically adjust height based on content */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        .dropdown-content-friends {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 10px;
+            width: 275px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content img {
+            border-width: 2.5px;
+            border-color: #7289da; /* Accent color for profile picture border */
+            border-style: solid;
+            border-radius: 50%;
+            width: 50px; /* Larger profile image */
+            height: 50px;
+            background-color: #121212;
+        }
+
+        .dropdown-content-friends:hover {
+            background-color: #292929;
+        }
+
+
+        .dropdown-button:hover {
+            background-color: #292929;
+        }
+
+        .dropdown-content-active{
+            display: flex;
+            max-height: 550px; /* Adjust as needed for dropdown content size */
+            opacity: 1;
+        }
+
+        .dropdown-button-active {
+            background-color: #292929;
+        }
+
+        .add-group-button {
+            background-color: #142887;
+            color: #ffffff;
+            font-size: 18px;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            position: absolute;
+            margin-left: 260px;
+            transition: background-color 0.3s, transform 0.3s;  
+        }
+
+        .add-group-button:hover {
+            background-color: #1d3bc3;
+            transform: scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #1e1e1e;
+            padding: 10px;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+            align-items: center;
+            border: 2px solid #7289da; /* Accent color for border */
+            border-radius: 10px;
+            width: 800px;
+            height: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content input {
+            width: 30%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .modal-content button {
+            background-color: #142887; /* Accent color for button */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.3s;  
+        }
+
+        .friends {
+            top: 40px; /* Adjust to position below the search bar */
+            left: 6%;
+            width: 88%;
+            height: 470px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 12;
+            overflow-y: auto;
+        }
+
+        .friends ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .friends li {
+            padding: 10px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            display: flex; 
+            align-items: center;
+            gap: 10px; 
+        }
+
+        .friends li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .add-user-button {
+            background-color: #142887;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;    
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Left: Website Name -->
+        <div class="website-name">UniVerse</div>
+
+        <!-- Center: Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="/chats" class="nav-tab">Chats</a>
+            <a href="/flashcard" class="nav-tab">Flashcard</a>
+            <a href="/classes" class="current-tab">Classes</a>
+        </nav>
+
+        <!-- Right: Profile Picture -->
+        <div class="profile" onclick="window.location.href='/account'">
+            <img src="{% static 'UniVerse/face.png' %}" alt="Profile Picture"> <!-- Replace with your image URL -->
+        </div>
+
+    </header>
+    
+    <main>
+
+        <p class="friend-request-title">
+            Classes
+            <button class="dropdown-button">▼</button>
+            <div class="dropdown-content">
+                {% for class in classes %}
+
+                    <a href="/group_chats/{{ class.id }}">
+                        <friendsection>
+                            <div>
+                                <span style="font-weight: bold; color:white;">{{ class.name }}</span>
+                            </div>
+                        </friendsection>
+                    </a>
+
+
+                {% endfor %}
+            </div>
+        </p>
+
+        <p class="friend-title">
+            Group Chats
+            <button class="add-group-button" onclick="openModalcreate()">+</button>
+        </p>
+            <div class="friend-list">
+                {% for group in groups %}
+                
+                    <a href="/group_chats/{{ group.id }}">
+                        <friendsection>
+                            <div>
+                                <span style="font-weight: bold; color:white;">{{ group.name }}</span>
+                            </div>
+                            <button class="edit-group-button" onclick="event.preventDefault(); openModaledit('{{ group.name }}')">✏️</button>
+                        </friendsection>
+                    </a>
+
+                {% endfor %}
+            </div>
+
+        <div class="chat-box">
+            <div class="StartAChat">Welcome to UniVerse</div>
+        </div>
+
+        <div id="groupModalcreate" class="modal">
+            <div class="modal-content">
+                <h2>Create Group Chat</h2>
+                <input type="text" id="creategroupName" placeholder="Enter Group Name">
+                <div class="friends">
+                    <ul>
+                        {% for user in users %}
+                            <li>
+                                <span style="font-weight: bold; color: #142887;">{{ forloop.counter }}.</span>
+
+                                <img 
+                                    src="{% static 'UniVerse/face.png' %}" 
+                                    alt="User Profile Picture" 
+                                    style="width: 35px; height: 35px; border-radius: 50%;"
+                                >
+                                <div>
+                                    <span style="font-weight: bold;">{{ user.first_name }} {{ user.last_name }}</span>
+                                </div>
+                                <button class="add-user-button" onclick="toggleUserSelection(this, '{{ user.id }}')">+</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <button onclick="createGroup()">Create</button>
+                <button class="close-button" onclick="closeModalcreate()">Close</button>
+            </div>
+        </div>
+
+        <div id="groupModaledit" class="modal">
+            <div class="modal-content">
+                <h2>Edit Group Chat</h2>
+                <input type="text" id="editgroupName" placeholder="Enter New Group Name">
+                <div class="friends">
+                    <ul>
+                        {% for user in users %}
+                            <li>
+                                <span style="font-weight: bold; color: #142887;">{{ forloop.counter }}.</span>
+    
+                                <img 
+                                    src="{% static 'UniVerse/face.png' %}" 
+                                    alt="User Profile Picture" 
+                                    style="width: 35px; height: 35px; border-radius: 50%;"
+                                >
+                                <div>
+                                    <span style="font-weight: bold;">{{ user.first_name }} {{ user.last_name }}</span>
+                                </div>
+                                <button class="add-user-button" onclick="toggleUserSelection(this, '{{ user.id }}')">+</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <button onclick="editGroup(event, '{{ group.id }}')">Save</button>
+                <button class="close-button" onclick="closeModaledit()">Close</button>
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+
+        // Create group chat popup when button is clicked
+        function openModalcreate() {
+            document.getElementById("groupModalcreate").style.display = "flex";
+        }
+
+        // Close the modal when the close button is clicked
+        function closeModalcreate() {
+            document.getElementById("groupModalcreate").style.display = "none";
+        }
+
+        let oldGroupName = "";
+
+        // Edit group chat popup when button is clicked
+        function openModaledit(groupName) {
+            oldGroupName = groupName;
+            document.getElementById("groupModaledit").style.display = "flex";
+        }
+
+        // Close the modal when the close button is clicked
+        function closeModaledit() {
+            document.getElementById("groupModaledit").style.display = "none";
+        }
+
+        function editGroup(event, groupId) {
+            // Get new group name
+            const new_groupName = document.getElementById('editgroupName').value;
+
+            // Validate inputs
+            if (!new_groupName) {
+                alert('Please enter a group name');
+                return;
+            }
+            
+            if (selectedUsers.length === 0) {
+                alert('Please select at least one user');
+                return;
+            }
+
+            // Call the edit group function
+            fetch('edit_group', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+
+                body: JSON.stringify({
+                    new_name: new_groupName, // New group name
+                    old_name: oldGroupName, // Old group name
+                    members: selectedUsers // Selected members    
+                })
+            })
+        }
+
+        // Array to store selected user IDs
+        let selectedUsers = [];
+            
+        function toggleUserSelection(button, userId) {
+            // Check if user is already selected
+            const index = selectedUsers.indexOf(userId);
+            
+            if (index === -1) {
+                // Add user to selection and update button
+                selectedUsers.push(userId);
+                button.textContent = "-";
+                button.classList.add('selected');
+                button.style.backgroundColor = '#ff4444';
+            } else {
+                // Remove user from selection
+                selectedUsers.splice(index, 1);
+                button.textContent = "+";
+                button.classList.remove('selected');
+                button.style.backgroundColor = '#142887';
+            }
+        }
+
+        function createGroup() {
+            // Get the group name from input field
+            const groupName = document.getElementById('creategroupName').value;
+
+            // Check if group name is empty
+            if (!groupName) {
+                alert('Please enter a group name');
+                return;
+            }
+            
+            // Check if any users are selected
+            if (selectedUsers.length === 0) {
+                alert('Please select at least one user');
+                return;
+            }
+
+            // Send a POST request to create the group
+            fetch('create_group', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // If you're using Django
+                },
+
+                // Include group name and selected users in request body
+                body: JSON.stringify({
+                    name: groupName,
+                    members: selectedUsers     
+                })
+            })
+        }
+
+        var dropdownButton = document.querySelector('.dropdown-button');
+        var dropdownContent = document.querySelector('.dropdown-content');
+        var friendList = document.querySelector('.friend-list');
+        var friendTitle = document.querySelector('.friend-title');
+
+        dropdownButton.addEventListener('click', function(){
+            dropdownContent.classList.toggle('dropdown-content-active');
+            dropdownButton.classList.toggle('dropdown-button-active');
+
+            if (dropdownContent.classList.contains('dropdown-content-active')) {
+                // Hide the friend list and friend title when dropdown is shown
+                friendList.style.display = 'none';
+                friendTitle.style.display = 'none';
+            } else {
+                // Show the friend list and friend title when dropdown is hidden
+                friendList.style.display = 'flex';
+                friendTitle.style.display = 'flex';
+            }
+        
+        });
+
+    </script>
+
+</body>
+</html>

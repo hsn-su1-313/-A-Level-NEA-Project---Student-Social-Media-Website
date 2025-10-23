@@ -1,0 +1,559 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Person</title>
+    <style>
+
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            padding: 12px 30px;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #121212;
+            color: #e0e0e0;
+            width: 96.5%; /* Stretch across the screen */
+            position: fixed; /* Optional: Sticks to the top */
+            top: 0; /* Keep it at the top of the viewport */
+            left: 0; /* Ensure it starts from the left edge */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left Section (Website name) */
+        .website-name {
+            font-size: 20px;
+            font-weight: 600;
+            align-items: center;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Center Section (Tabs) */
+        .nav-tabs {
+            display: flex;
+            gap: 30px; /* Space between tabs */
+            justify-content: center; /* Centers the nav tabs horizontally */
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-tab:hover {
+            background-color: #142887; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Profile Section Styling */
+        .profile {
+            display: flex;
+            cursor: pointer;
+            margin-left: 60px;
+            align-items: center;
+        }
+
+        /* Profile Picture Styling */
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);  /* Slight zoom-in effect */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+        }
+
+        /* Container for friend list */
+        .friend-list {
+            display: flex;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: 57px;
+            height: calc(100vh - 57px); /* Full height of the viewport */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for separation */
+        }
+
+        /* Hide the scrollbar */
+        .friend-list::-webkit-scrollbar {
+            display: none; /* For WebKit browsers like Chrome and Safari */
+        }
+        
+        /* Individual friend sections */
+        friendsection {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 10px;
+            width: 275px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+        }
+        
+        friendsection:hover {
+            background-color: #292929; /* Lighter gray on hover */
+        }
+        
+        /* Profile Image Styling */
+        friendsection img {
+            border-width: 2.5px;
+            border-color: #7289da; /* Accent color for profile picture border */
+            border-style: solid;
+            border-radius: 50%;
+            width: 50px; /* Larger profile image */
+            height: 50px;
+            background-color: #121212;
+        }
+        
+        /* Friend Name and Message Styling */
+        friendsection p {
+            font-size: 16px;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Chat box container */
+        .chat-box {
+            position: fixed;
+            right: 40px;
+            top: 97px;
+            background-color: rgb(10, 19, 48);
+            width: 100%;
+            max-width: 915px;
+            height: calc(100vh - 170px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main{
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+            padding: 5px;
+            max-width: 100%;
+            font-family: Optima, sans-serif;
+            font-weight: 500;
+            font-size: medium;
+            overflow-y: auto; /* Make the message area scrollable */
+            flex-grow: 1;
+            margin-bottom: 50px;
+            scrollbar-width: none;
+        }
+        main section{
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+            padding: 5px;
+        }
+        main section > div{
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+        main .to{
+            margin-left: auto;
+        }
+        main .to .details{
+            display: grid;
+            grid-template-columns: auto auto auto;
+            border-top-right-radius: 15px;
+            border-top-left-radius: 15px;
+            background-color: rgb(3, 1, 14);
+            margin: 0;
+            padding: 10px 10px;
+            border: 0;
+        }
+        main .to .details > p{
+            font-size: 12px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            margin: 0;
+            padding: 0px 10px ;
+            border: 0;
+        }
+        main .to .message{
+            display: flex;
+            border-bottom-right-radius: 15px;
+            margin: 0;
+            padding: 0px 10px ;
+            border: 0;
+            background-color: rgb(3, 1, 14);
+        }
+        main .to .message > p{
+            color: rgb(255, 255, 255);
+            margin: 0;
+            padding: 6px 10px;
+            border: 0;
+            text-wrap: wrap;
+            text-overflow: clip;
+        }
+        main .from{
+            margin-right: auto;
+        }
+        main .from .details{
+            display: grid;
+            grid-template-columns: auto auto;
+            border-top-right-radius: 15px;
+            border-top-left-radius: 15px;
+            background-color: rgb(255, 255, 255);
+            margin: 0;
+            padding: 10px 10px;
+            border: 0;
+        }
+        main .from .details > p{
+            font-size: 12px;
+            color: rgb(3, 1, 14);
+            text-align: center;
+            margin: 0;
+            padding: 0px 10px ;
+            border: 0;
+        }
+        main .from .message{
+            display: flex;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 15px;
+            margin: 0;
+            padding: 0px 10px ;
+            border: 0;
+            background-color: rgb(255, 255, 255);
+        }
+        main .from .message > p{
+            color: rgb(3, 1, 14);
+            margin: 0;
+            padding: 6px 10px;
+            border: 0;
+            text-wrap: wrap;
+        }   
+        
+        /* Send button styling */
+        .send-button{
+            position: fixed;
+            border: 0;
+            border-radius: 10px;
+            background-color: #142887;
+            color: rgb(255, 255, 255);
+            font-size: medium;
+            width: 65px;
+            height: 37px;
+            bottom: 55px;
+            right: 57px;
+        }
+        
+        .send-button:hover{
+            background-color:rgb(22, 13, 148); /* Example: Change background color */
+            transform: scale(1.1); /* Example: Slightly enlarge the button */
+            cursor: pointer; /* Change cursor to pointer when hovered */
+        }
+        
+        .send-button:active{
+            background-color:rgb(2, 7, 70); /* Example: Darken the background color when clicked */
+            transform: scale(1); /* Reset the size when the button is clicked */
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add an inset shadow for a pressed effect */
+        }
+        
+        textarea{
+            position: fixed;
+            border-radius: 10px;
+            width: 750px;
+            max-height: 200px;
+            font-size: medium;
+            text-align: left;
+            font-family: Optima, sans-serif;
+            font-weight: bold;
+            bottom: 53px;
+            height: 40px;
+            outline: none;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 22px;
+            box-sizing: border-box;
+            padding: 8px 15px;
+            font-size: 16px;
+            flex: 1;
+            resize: none;
+            scrollbar-width: none;
+        }
+
+        .details .status{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .details .status div{
+            margin: 2.5px;
+            width: 5.5px;
+            height: 5.5px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 50%;
+        }
+        .details .seen div{
+            background-color: rgb(0, 215, 255);
+        }
+
+        .current-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            background-color: #142887; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .image-attachment-button {
+            background-color: #142887;
+            position: absolute;
+            bottom: 30px;
+            right: 90px;
+            width: 82px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            border-radius: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!-- Left: Website Name -->
+        <div class="website-name">UniVerse</div>
+
+        <!-- Center: Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="/chats" class="nav-tab">Chats</a>
+            <a href="/flashcard" class="nav-tab">Flashcard</a>
+            <a href="/classes" class="current-tab">Classes</a>
+        </nav>
+
+        <!-- Right: Profile Picture -->
+        <div class="profile" onclick="window.location.href='/account'">
+            <img src="{% static 'UniVerse/face.png' %}" alt="Profile Picture"> <!-- Replace with your image URL -->
+        </div>
+
+    </header>
+
+    <div class="friend-list">
+        {% for group in groups %}
+
+            {% if group.id == group_id %}
+
+                <a href="/group_chats/{{ group.id }}">
+                    <friendsection style="background-color: rgb(10, 19, 48);">
+                        <div>
+                            <span style="font-weight: bold; color:white;">{{ group.name }}</span>
+                        </div>
+                    </friendsection>
+                </a>
+                
+            {% else %}
+
+                <a href="/group_chats/{{ group.id }}">
+                    <friendsection>
+                        <div>
+                            <span style="font-weight: bold; color:white;">{{ group.name }}</span>
+                        </div>
+                    </friendsection>
+                </a>
+
+            {% endif %}
+
+        {% endfor %}
+    </div>
+
+    <div class="chat-box">
+
+        <main id="messages-area">
+
+            {% for message in messages %}
+                {% if message.sender == me %}
+
+                    <section class="to">
+                        <div class="details">
+                            <p>{{ message.date }}</p>
+                            <p>{{ message.time }}</p>
+                            <p><strong>{{ message.sender }}</strong></p>
+                        </div>
+                        <div class="message">
+                            <p style="overflow-wrap: anywhere;">{{ message.message }}</p>
+                        </div>
+                    </section>
+                
+                {% else %}
+
+                    <section class="from">
+                        <div class="details">
+                            <p>{{ message.date }}</p>
+                            <p>{{ message.time }}</p>
+                            <p><strong>{{ message.sender }}</strong></p>
+                        </div>
+                        <div class="message">
+                            <p style="overflow-wrap: anywhere;">{{ message.message }}</p>
+                        </div>
+                    </section>
+
+                {% endif %}
+            {% endfor %}
+
+        </main>
+
+        <textarea name="text" placeholder="Send a chat" oninput="this.style.height = ''; this.style.height = this.scrollHeight +'px'" id="the-message-to-send"></textarea>
+        <input class="image-attachment-button" id="image-input" type="file">
+        <button class="send-button" id="send-message-button">Send</button>
+
+
+    </div>
+
+        <script>
+
+            function scrollToBottom() {
+                    messages_area.scrollTop = messages_area.scrollHeight;
+            }
+
+            window.onload = function() {
+                scrollToBottom(); 
+            };
+
+            function getFormattedDateTime() {
+                const now = new Date();
+
+                // Format the date as "Dec. 27, 2024"
+                const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+                const formattedDate = now.toLocaleDateString('en-US', dateOptions);
+
+                // Format the time as "6:23 p.m."
+                const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+                const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
+
+                return { formattedDate, formattedTime };
+            }
+            
+            const imageInput = document.getElementById("image-input");
+
+            // Listen for input change event
+            imageInput.addEventListener("change", function () {
+                // Get the formatted date and time for the message
+                const { formattedDate, formattedTime } = getFormattedDateTime();
+
+                // Get the selected image file from the input
+                const file = event.target.files[0];
+                
+                // Prepare the message data object
+                const messageData = {
+                    type: "image",
+                    image: file,
+                    date: formattedDate,
+                    time: formattedTime,
+                    group_id: group_id
+                };
+                
+                // Send the image data over the WebSocket connection
+                chat_websocket.send(messageData);
+            });
+
+
+            const group_id = "{{ group_id }}";
+            const url = `ws://127.0.0.1:8000/websocket/group/${group_id}`;
+            const chat_websocket = new WebSocket(url);
+
+            const messages_area = document.getElementById("messages-area");
+            const text_area = document.getElementById("the-message-to-send");
+            const send_button = document.getElementById("send-message-button");
+            
+            send_button.addEventListener("click", function(){
+                const { formattedDate, formattedTime } = getFormattedDateTime();
+
+                const messageData = {
+                    type: "text",
+                    message: text_area.value,
+                    date: formattedDate,
+                    time: formattedTime,
+                    group_id: group_id
+                };
+
+                chat_websocket.send(JSON.stringify(messageData));
+
+                text_area.value = "";
+
+                scrollToBottom();
+
+            });
+
+            chat_websocket.onmessage = function(event){
+                const received_data = JSON.parse(event.data)
+
+
+                if(received_data.type_of_data == "group_text"){
+                    messages_area.insertAdjacentHTML("beforeend" , `<section class="from">
+                        <div class="details">
+                            <p>${received_data.date}</p>
+                            <p>${received_data.time}</p>
+                            <p><strong>${received_data.sender}</strong></p>
+                        </div>
+                        <div class="message">
+                            <p style="overflow-wrap: anywhere;">${received_data.data}</p>
+                        </div>
+                    </section>`)
+
+                    chat_websocket.send(`{"type":"i_have_seen_the_messages"}`);
+
+                    scrollToBottom();
+
+                }
+                else if(received_data.type_of_data == "the_messages_have_been_seen_from_the_other"){
+                    const my_messages = document.getElementsByClassName("status")
+                    for( let i=0; my_messages.length > i; i++ ){
+                        my_messages[i].classList.add("seen")
+                    }
+                }
+
+            };
+
+
+        </script>
+
+</body>
+</html>

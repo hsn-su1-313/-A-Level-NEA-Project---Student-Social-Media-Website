@@ -1,0 +1,47 @@
+<div class="friend-suggestion">
+
+    <!-- Search bar container for searching users -->
+    <div class="search-container">
+        
+        <!-- Input field for searching users, calls expandSearch() when clicked -->
+        <input 
+            type="text" 
+            class="search-bar" 
+            placeholder="Search users" 
+            onclick="expandSearch()"
+        />
+
+        <i class="fa fa-search custom-icon" onclick="searchUsers()"></i>
+
+        <!-- Dropdown list displaying search results -->
+        <div class="search-dropdown">
+            <ul>
+                {% for person in users %}
+                    {% if person.first_name != "" and person.first_name != me.first_name %}
+                        <li>
+                            <img 
+                                src="{% static 'UniVerse/face.png' %}" 
+                                alt="User Profile Picture" 
+                            >
+                            <div>
+                                {{ person.first_name }} {{ person.last_name }}
+                                <br>
+                                <{{ person.username }}
+                            </div>
+                            
+                            {% if person.userprofile in me_profile.friends.all %}
+                                <button class="friend-btn">✓</button>
+                            {% else %}
+                                <button class="friend-btn-add" onclick="friendRequest('{{ person.username }}', this)">+</button>
+                            {% endif %}
+                            
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>                    
+        <!-- Back button to collapse the search dropdown -->
+        <button class="search-back" onclick="collapseSearch()">Back</button>
+
+    </div>    
+</div>

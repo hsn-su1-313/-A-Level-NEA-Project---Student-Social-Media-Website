@@ -1,0 +1,463 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chats</title>
+    <style>
+ 
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            padding: 12px 30px;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #121212;
+            color: #e0e0e0;
+            width: 96.5%; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left Section (Website name) */
+        .website-name {
+            font-size: 20px;
+            font-weight: 600;
+            align-items: center;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Center Section (Tabs) */
+        .nav-tabs {
+            display: flex;
+            gap: 30px; 
+            justify-content: center; 
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        /* Styling for current tab the user is on*/
+        .current-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            background-color: #142887; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-tab:hover {
+            background-color: #142887; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Profile Section Styling */
+        .profile {
+            display: flex;
+            cursor: pointer;
+            margin-left: 60px;
+            align-items: center;
+        }
+
+        /* Profile Picture Styling */
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);  /* Slight zoom-in effect */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+        }
+
+        /* Container for friend list */
+        .friend-list {
+            display: flex;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 500px; /* Full height of the viewport */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        /* Hide the scrollbar */
+        .friend-list::-webkit-scrollbar {
+            display: none; /* For WebKit browsers like Chrome and Safari */
+        }
+        
+        /* Individual friend sections */
+        friendsection {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 10px;
+            width: 275px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+        }
+        
+        friendsection:hover {
+            background-color: #292929; /* Lighter gray on hover */
+        }
+        
+        /* Profile Image Styling */
+        friendsection img {
+            border-width: 2.5px;
+            border-color: #7289da; /* Accent color for profile picture border */
+            border-style: solid;
+            border-radius: 50%;
+            width: 50px; /* Larger profile image */
+            height: 50px;
+            background-color: #121212;
+        }
+        
+        /* Friend Name and Message Styling */
+        friendsection p {
+            font-size: 16px;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        /* Chat box container */
+        .chat-box {
+            position: fixed;
+            right: 40px;
+            top: 97px;
+            background-color: rgb(10, 19, 48);
+            width: 100%;
+            max-width: 915px;
+            height: calc(100vh - 170px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .StartAChat{
+            display: flex;
+            flex-direction: column;
+            font-size: 50px;
+            justify-content: center;
+            align-items: center;
+            font-family: 'DejaVu Sans Mono', monospace;
+            color: rgb(241, 243, 250);
+        }
+
+        .friend-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: -22px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 50px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .friend-request-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 65px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 60px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .dropdown-button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 5px;
+            position: absolute;
+            margin-left: 265px;
+        }
+
+        .dropdown-content {
+            display: none;
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 100%; /* Automatically adjust height based on content */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        .dropdown-content-friends {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 10px;
+            width: 275px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content img {
+            border-width: 2.5px;
+            border-color: #7289da; /* Accent color for profile picture border */
+            border-style: solid;
+            border-radius: 50%;
+            width: 50px; /* Larger profile image */
+            height: 50px;
+            background-color: #121212;
+        }
+
+        .dropdown-content-friends:hover {
+            background-color: #292929;
+        }
+
+
+        .dropdown-button:hover {
+            background-color: #292929;
+        }
+
+        .dropdown-content-active{
+            display: flex;
+            max-height: 550px; /* Adjust as needed for dropdown content size */
+            opacity: 1;
+        }
+
+        .dropdown-button-active {
+            background-color: #292929;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Left: Website Name -->
+        <div class="website-name">UniVerse</div>
+
+        <!-- Center: Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="/chats" class="current-tab">Chats</a>
+            <a href="/flashcard" class="nav-tab">Flashcard</a>
+            <a href="/classes" class="nav-tab">Classes</a>
+        </nav>
+
+        <!-- Right: Profile Picture -->
+        
+        <a class="profile" href="/account">
+            {% if profile_picture %}
+                <img src={{ profile_picture }} alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'UniVerse/face.png' %}" alt="User Profile Picture">
+            {% endif %}
+        </a>     
+       
+
+    </header>
+    
+    <main>
+
+        <!-- Friend requests -->
+        <p class="friend-request-title">
+            Friend requests
+            <button class="dropdown-button">▼</button>
+            <div class="dropdown-content">
+
+                {% for request in friend_requests %}
+                    <div class="dropdown-content-friends">
+                        <img src="{% static 'UniVerse/face.png' %}" alt="User Profile Picture">
+                        <div>
+                            <span style="font-weight: bold; color:white;">
+                                {{ request.from_user.first_name }} 
+                                {{ request.from_user.last_name }}</span>
+                            <br>
+                            <span style="color: #d8d2d2;">{{ request.from_user.username }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Accept friend request button -->
+                    <button class="accept" onclick="friendRequestResponse('{{ request.from_user.username }}', 'Accepted')">
+                        ✓
+                    </button>
+
+                    <!-- Reject friend request button -->
+                    <button class="reject" onclick="friendRequestResponse('{{ request.from_user.username }}', 'Rejected')">
+                        ✗
+                    </button>
+
+                {% endfor %}
+                
+                <!-- Friend request notifications -->
+                {% for request in accepted_friend_requests%}
+                    <div id="notification-{{ request.from_user.username }}" 
+                    class="accepted">{{ request.to_user.username }} has accepted your friend request.</div>
+                    <button id="button-{{ request.from_user.username }}"
+                    class="remove" onclick="removeNotification(request.from_user.username, request.from_user.status)">
+                    ✗
+                    </button>
+                {% endfor %}
+
+                {% for request in rejected_friend_requests%}
+                    <div id="notification-{{ request.from_user.username }}" 
+                    class="accepted">{{ request.to_user.username }} has rejected your friend request.</div>
+                    <button id="button-{{ request.from_user.username }}" 
+                    class="remove" onclick="removeNotification(request.from_user.username, request.from_user.status)">
+                    ✗
+                    </button>
+                {% endfor %}
+            </div>
+        </p>
+
+        <!-- Friends list -->
+        <p class="friend-title">Friends</p>
+        <div class="friend-list">
+            {% for person in users %}
+            
+                <a href="/chat_person/{{ person.id }}">
+                    <friendsection>
+                        <img src="{% static 'UniVerse/face.png' %}">
+                        <div>
+                            <span style="font-weight: bold; color:white;">{{ person.first_name }} {{ person.last_name }}</span>
+                            <br>
+                            <span style="color: #d8d2d2;">{{ person.username }}</span>
+                        </div>
+                    </friendsection>
+                </a>
+
+            {% endfor %}
+        </div>
+
+        <!-- Welcome message -->
+        <div class="chat-box">
+            <div class="StartAChat">Welcome to UniVerse</div>
+        </div>
+        
+    </main>
+
+    <script>
+        var dropdownButton = document.querySelector('.dropdown-button');
+        var dropdownContent = document.querySelector('.dropdown-content');
+        var friendList = document.querySelector('.friend-list');
+        var friendTitle = document.querySelector('.friend-title');
+
+        dropdownButton.addEventListener('click', function(){
+            dropdownContent.classList.toggle('dropdown-content-active');
+            dropdownButton.classList.toggle('dropdown-button-active');
+
+            if (dropdownContent.classList.contains('dropdown-content-active')) {
+                // Hide the friend list and friend title when dropdown is shown
+                friendList.style.display = 'none';
+                friendTitle.style.display = 'none';
+            } else {
+                // Show the friend list and friend title when dropdown is hidden
+                friendList.style.display = 'flex';
+                friendTitle.style.display = 'flex';
+            }
+        
+        });
+
+        
+        function friendRequestResponse(fromUsername, response) {
+            // Sending a POST request to the 'friend_request_response' endpoint
+            fetch('friend_request_response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specifies that the request body contains JSON data
+                    'X-CSRFToken': '{{ csrf_token }}'   // CSRF token for security
+                },
+
+                body: JSON.stringify({       // Convert the data into a JSON string before sending
+                    username: fromUsername,  // The username of the user who sent the request
+                    response: response       // The response (accept or reject)
+                })
+            })
+        }
+
+        
+        function removeNotification(fromUsername, response) {
+            document.getElementById('notification-' + fromUsername).remove();
+            document.getElementById('button-' + fromUsername).remove();
+            // Assuming you want to send this data to the backend via an AJAX call (using Fetch API for example)
+            fetch('remove_notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // If you're using Django
+                },
+
+                body: JSON.stringify({
+                    username: fromUsername,  // The username of the user who sent the request
+                    response: response       // The response (accept or reject)
+                })
+            })
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chats</title>
+    <style>
+ 
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            padding: 12px 30px;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #121212;
+            color: #e0e0e0;
+            width: 96.5%; /* Stretch across the screen */
+            position: fixed; /* Optional: Sticks to the top */
+            top: 0; /* Keep it at the top of the viewport */
+            left: 0; /* Ensure it starts from the left edge */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left Section (Website name) */
+        .website-name {
+            font-size: 20px;
+            font-weight: 600;
+            align-items: center;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Center Section (Tabs) */
+        .nav-tabs {
+            display: flex;
+            gap: 30px; /* Space between tabs */
+            justify-content: center; /* Centers the nav tabs horizontally */
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .current-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            background-color: #142887; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-tab:hover {
+            background-color: #142887; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Profile Section Styling */
+        .profile {
+            display: flex;
+            cursor: pointer;
+            margin-left: 60px;
+            align-items: center;
+        }
+
+        /* Profile Picture Styling */
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);  /* Slight zoom-in effect */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+        }
+
+        .leaderboard-title{
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 65px;
+            margin-left: -8px;
+            color: rgb(241, 243, 250);
+            background-color: #121212;  
+            width: 280px;
+            height: 60px;
+            display: flex;
+            padding: 0px 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1); 
+            align-items: center;
+        }
+
+        .dropdown-content {
+            flex-direction: column; /* Stack sections vertically */
+            justify-content: flex-start; /* Ensure content starts from the top */
+            padding: 15px; /* Padding for the container */
+            background-color: #121212; /* Match the dark mode theme */
+            width: 300px; /* Fixed width for the left section */
+            margin-top: -20px;
+            height: 100%; /* Automatically adjust height based on content */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            position: fixed;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 1);  /* Subtle shadow for separation */
+            transition: margin-top 0.3s ease;
+        }
+
+        .dropdown-content-leaderboard {
+            background-color: #1e1e1e; /* Dark gray background */
+            margin: 10px 0; /* Space between sections */
+            padding: 20px 15px;
+            width: 265px; /* Stretch to fill the container width */
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start; /* Align content to the left */
+            align-items: center; /* Center items vertically */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            gap: 15px; /* Space between profile and text */
+            transition: background-color 0.3s;
+            font-size: 20px;
+        }
+
+        .dropdown-content-leaderboard:hover {
+            background-color: #292929;
+        }
+
+        .dropdown-content-active{
+            display: flex;
+            max-height: 550px; /* Adjust as needed for dropdown content size */
+            opacity: 1;
+        }
+
+        .message-box {
+            position: fixed;
+            right: 40px;
+            top: 97px;
+            background-color: rgb(10, 19, 48);
+            width: 100%;
+            max-width: 915px;
+            height: calc(100vh - 170px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .message{
+            display: flex;
+            flex-direction: column;
+            font-size: 50px;
+            justify-content: center;
+            align-items: center;
+            font-family: 'DejaVu Sans Mono', monospace;
+            color: rgb(241, 243, 250);
+        }
+
+        .active-leaderboard {
+            background-color: rgb(10, 19, 48) !important; /* Blue background */
+            color: white !important;
+        }
+
+        .leaderboard {
+            position: absolute;
+            top: 40px; /* Adjust to position below the search bar */
+            left: 6%;
+            width: 88%;
+            height: 470px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 12;
+            overflow-y: auto;
+        }
+
+        .leaderboard ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard li {
+            padding: 10px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            display: flex; 
+            align-items: center;
+            gap: 10px; 
+        }
+
+        .leaderboard li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .points {
+            margin-left: auto;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Leaderboard Header Row */
+        .leaderboard-header {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            background-color: black; /* Blue background */
+            color: white;
+            padding: 12px;
+            border-radius: 8px 8px 0 0;
+            font-family: 'DejaVu Sans Mono', monospace;
+        }
+
+        /* Column Title Spacing */
+        .rank-header {
+            width: 65px;
+            text-align: left;
+        }
+
+        .profile-header {
+            width: 80px;
+            text-align: left;
+        }
+
+        .name-header {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .points-header {
+            width: 100px;
+            text-align: right;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Left: Website Name -->
+        <div class="website-name">UniVerse</div>
+
+        <!-- Center: Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="/chats" class="nav-tab">Chats</a>
+            <a href="/flashcard" class="current-tab">Flashcard</a>
+            <a href="/classes" class="nav-tab">Classes</a>
+        </nav>
+
+        <!-- Right: Profile Picture -->
+        <div class="profile" onclick="window.location.href='/account'">
+            <img src="{% static 'UniVerse/face.png' %}" alt="Profile Picture"> <!-- Replace with your image URL -->
+        </div>
+
+    </header>
+    
+    <main>
+
+        <p class="leaderboard-title">
+            Leaderboards
+            <div class="dropdown-content">
+                <a href="/leaderboards/1" 
+                    class="dropdown-content-leaderboard {% if leaderboard_id == 1 %}active-leaderboard{% endif %}" 
+                    style="color:white;">
+                    All time
+                </a>
+
+                <a href="/leaderboards/2" 
+                    class="dropdown-content-leaderboard {% if leaderboard_id == 2 %}active-leaderboard{% endif %}" 
+                    style="color:white;">
+                    This month
+                </a>
+
+                <a href="/leaderboards/3" 
+                    class="dropdown-content-leaderboard {% if leaderboard_id == 3 %}active-leaderboard{% endif %}" 
+                    style="color:white;">
+                    This week
+                </a>
+            </div>
+        </p>
+
+        <div class="message-box">
+            <div class="leaderboard">
+                <ul>
+
+                    <!-- Leaderboard header columns-->
+                    <div class="leaderboard-header">
+                        <span class="rank-header">Rank</span>
+                        <span class="name-header">Name</span>
+                        <span class="points-header">Points</span>
+                    </div>        
+
+                    {% for user in leaderboard_data %}
+                        <li>
+                            <span style="font-weight: bold; color: #142887;">{{ forloop.counter }}.</span>
+
+                            <img 
+                                src="{% static 'UniVerse/face.png' %}" 
+                                alt="User Profile Picture" 
+                                style="width: 35px; height: 35px; border-radius: 50%;"
+                            >
+                            <div>
+                                <span style="font-weight: bold;">{{ user.first_name }} {{ user.last_name }}</span>
+                            </div>
+                            <div class="points">
+                                {% if leaderboard_id == 1 %}
+                                    {{ user.all_time }}
+                                {% elif leaderboard_id == 2 %}
+                                    {{ user.monthly }}
+                                {% elif leaderboard_id == 3 %}
+                                    {{ user.weekly }}
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>          
+        </div>
+        
+    </main>
+
+</body>
+</html>

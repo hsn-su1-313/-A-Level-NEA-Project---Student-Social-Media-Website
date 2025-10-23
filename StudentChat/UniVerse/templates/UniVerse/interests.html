@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Interests</title>
+
+    <style>
+        /* Body styling */
+        body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: #e0e0e0;
+            height: 100vh;
+        }
+
+        /* Title styling */
+        h1 {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Form container styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background-color: #1c1c1c;
+            width: 100%;
+            max-width: 550px;
+            box-sizing: border-box;
+        }
+
+        /* Interest selection styling */
+        .interest-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2.5px solid #1b2d82;
+            border-radius: 8px;
+            font-size: 18px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+
+        .interest-option:hover {
+            border-color: #7289da;
+            box-shadow: 0 0 8px rgba(114, 137, 218, 0.3);
+        }
+
+        /* Dropdown styling */
+        select {
+            padding: 12px;
+            border: 2.5px solid #1b2d82;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #333;
+            color: #e0e0e0;
+            width: 80%;
+        }
+
+        /* Text input for other interest */
+        input[type="text"] {
+            margin: 15px 0;
+            padding: 12px;
+            border: 2.5px solid #1b2d82;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #333;
+            color: #e0e0e0;
+            width: 100%;
+        }
+
+        /* Button styling */
+        button {
+            margin: 15px 0;
+            padding: 15px 25px;
+            color: white;
+            background-color: #1b2d82;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #173d7a;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #0d2a54;
+            transform: translateY(1px);
+        }
+
+        p {
+            color: #e0e0e0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .selection-error {
+            color: #ff0000;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Select Your Top 4 Interests</h1>
+
+    {% if error %}
+        <p class="selection-error">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="interest-option">
+            <label for="sports">
+                <input type="checkbox" name="interests" value="Sports" id="sports-checkbox">    
+                Sports: 
+            </label>
+            <select id="sports" name="sports" onchange="updateCheckboxValue('sports', 'sports-checkbox', 'selected-sport')">
+                <option value="⚽ Football">⚽ Football</option>
+                <option value="🏀 Basketball">🏀 Basketball</option>
+                <option value="🎾 Tennis">🎾 Tennis</option>
+                <option value="🏏 Cricket">🏏 Cricket</option>
+                <option value="⚾ Baseball">⚾ Baseball</option>
+                <option value="🏉 Rugby">🏉 Rugby</option>
+                <option value="🏒 Hockey">🏒 Hockey</option>
+                <option value="⛳ Golf">⛳ Golf</option>
+                <option value="🏊‍♂️ Swimming">🏊‍♂️ Swimming</option>
+                <option value="🏐 Volleyball">🏐 Volleyball</option>
+                <option value="🏸 Badminton">🏸 Badminton</option>
+                <option value="🥊 Boxing">🥊 Boxing</option>
+                <option value="🛹 Skateboarding">🛹 Skateboarding</option>
+                <option value="🏓 Table Tennis">🏓 Table Tennis</option>
+                <option value="🚴 Cycling">🚴 Cycling</option>
+                <option value="🥋 Mixed Martial Arts">🥋 Mixed Martial Arts</option>
+                <option value="⛷️ Skiing">⛷️ Skiing</option>
+                <option value="🏂 Snowboarding">🏂 Snowboarding</option>
+                <option value="🏎️ Car Racing">🏎️ Car Racing</option>
+                <option value="🏈 American Football">🏈 American Football</option>
+                <option value="🏹 Archery">🏹 Archery</option>
+                <option value="🚣 Rowing">🚣 Rowing</option>
+                <option value="🏄‍♂️ Surfing">🏄‍♂️ Surfing</option>
+            </select>
+        </div>
+
+        <div class="interest-option">
+            <label for="music">
+                <input type="checkbox" name="interests" value="Music" id="music-checkbox">    
+                Music: 
+            </label>
+            <select id="music" name="music" onchange="updateCheckboxValue('music', 'music-checkbox', 'selected-music')">
+                <option value="🎤 Pop">🎤 Pop</option>
+                <option value="🎸 Rock">🎸 Rock</option>
+                <option value="🎷 Jazz">🎷 Jazz</option>
+                <option value="🎻 Classical">🎻 Classical</option>
+                <option value="🎧 Hip Hop">🎧 Hip Hop</option>
+                <option value="🎙️ R&B">🎙️ R&B</option>
+                <option value="🎸 Blues">🎸 Blues</option>
+                <option value="🤠 Country">🤠 Country</option>
+                <option value="🌴 Reggae">🌴 Reggae</option>
+                <option value="💃 Dance">💃 Dance</option>
+                <option value="🎛️ Techno">🎛️ Techno</option>
+                <option value="🎸 Indie">🎸 Indie</option>
+                <option value="🎻 Folk">🎻 Folk</option>
+                <option value="🎧 Soul">🎧 Soul</option>
+                <option value="🤘 Metal">🤘 Metal</option>
+                <option value="🎤 Alternative">🎤 Alternative</option>
+                <option value="🎧 EDM">🎧 EDM</option>
+                <option value="🌙 Ambient">🌙 Ambient</option>
+                <option value="🏠 House">🏠 House</option>
+                <option value="🕺 Disco">🕺 Disco</option>
+            </select>
+        </div>
+
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🎮 Gaming">
+                🎮 Gaming
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="✈️ Travel">
+                ✈️ Travel
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🎨 Art">
+                🎨 Art
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="💻 Technology">
+                💻 Technology
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🏋️ Fitness">
+                🏋️ Fitness
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="📚 Reading">
+                📚 Reading
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🎬 Movies">
+                🎬 Movies
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="📸 Photography">
+                📸 Photography
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="✍️ Writing">
+                ✍️ Writing
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="👠 Fashion">
+                👠 Fashion
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🔬 Science">
+                🔬 Science
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🌐 Politics">
+                🌐 Politics
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="💼 Entrepreneurship">
+                💼 Entrepreneurship
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🧘‍♀️ Yoga">
+                🧘‍♀️ Yoga
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="📜 Poetry">
+                📜 Poetry
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🎤 Public Speaking">
+                🎤 Public Speaking
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="⛺ Camping">
+                ⛺ Camping
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="👨‍🍳 Cooking">
+                👨‍🍳 Cooking
+            </label>
+        </div>
+        
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="🎣 Fishing">
+                🎣 Fishing
+            </label>
+        </div>
+        
+        <!-- Other interest option -->
+        <div class="interest-option">
+            <label>
+                <input type="checkbox" name="interests" value="other">
+                Other: 
+            </label>
+            <input type="text" id="other-interest" name="other_interest" 
+            placeholder="Type your interest here..." style="width: 75%;" maxlength="20">
+        </div>
+
+        <button type="submit">Submit Interests</button>
+    </form>
+
+    <script>
+
+        // Limit the number of checkboxes that can be selected to 4 and show error if otherwise
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const selectedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                if (selectedCount > 4) {
+                    alert('You can select a maximum of 4 options.');
+                    checkbox.checked = false;
+                }
+            });
+        });
+        
+        // Update the checkbox value based on the selected dropdown option
+        function updateCheckboxValue(subject, id, selection) {
+            const selectElement = document.getElementById(subject);
+            const checkboxElement = document.getElementById(id);
+            const selectedValue = selectElement.value;
+
+            checkboxElement.value = selectedValue;
+            document.getElementById(selection).textContent = selectedValue;
+        }
+
+        // Initialize the checkbox value on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCheckboxValue('sports', 'sports-checkbox', 'selected-sport');
+            updateCheckboxValue('music', 'music-checkbox', 'selected-music');
+        });
+        
+    </script>
+
+</body>
+</html>

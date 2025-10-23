@@ -1,0 +1,1192 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            padding: 12px 30px;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #121212;
+            color: #e0e0e0;
+            width: 96.5%; /* Stretch across the screen */
+            position: fixed; /* Optional: Sticks to the top */
+            top: 0; /* Keep it at the top of the viewport */
+            left: 0; /* Ensure it starts from the left edge */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 1);
+        }
+
+        /* Left Section (Website name) */
+        .website-name {
+            font-size: 20px;
+            font-weight: 600;
+            align-items: center;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Center Section (Tabs) */
+        .nav-tabs {
+            display: flex;
+            gap: 30px; /* Space between tabs */
+            justify-content: center; /* Centers the nav tabs horizontally */
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #e0e0e0; 
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: background-color 0.4s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-tab:hover {
+            background-color: #142887; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 1); 
+        }
+
+        /* Profile Section Styling */
+        .profile {
+            display: flex;
+            cursor: pointer;
+            margin-left: 60px;
+            align-items: center;
+        }
+
+        /* Profile Picture Styling */
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.1);  /* Slight zoom-in effect */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+        }
+
+        
+        .mainBox {
+            position: fixed;
+            right: 17%;
+            top: 85px;
+            width: 900px;
+            height: 575px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
+            background-color: rgb(1, 1, 31);
+            border-style: None;
+            border-radius: 15px;
+        }
+
+        .account-section {
+            position: relative;
+            width: 100%;
+            height: 50%;
+        }
+
+        .friend-suggestion {
+            position: relative;
+            width: 100%;
+            height: 40%;
+        }
+
+        .options {
+            position: relative;
+            width: 100%;
+            height: 10%;
+        }
+
+        .account-section::after, 
+        .friend-suggestion::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 1px; /* Thickness of the separator */
+            background-color: #ffffff; /* Separator color */
+            opacity: 0.5; /* Subtle transparency */
+        }
+        
+        .pfp {
+            position: relative;
+            top: 12%;
+            left: 6%;
+            width: 165px;
+            height: 165px;
+        }
+
+        .pfp img {
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            transition: all 0.3s ease;
+            object-fit: cover; 
+        }
+
+        .pfp-button {
+            position: absolute;
+            bottom: 8%;
+            left: 7%;
+            width: 125px;
+            height: 16px;
+            color: white;
+            background-color: black;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 15px 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pfp-button:hover {
+            background-color: #007BFF; 
+            transform: translateY(-3px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .name {
+            top: -42%;
+            left: 32%;
+            position: relative;
+            font-family: 'DejaVu Sans Mono', monospace;
+            font-size: 17px;
+            color: #ffffff;
+        }
+
+        .username {
+            top: -42%;
+            left: 31.25%;
+            position: relative;
+            font-family: 'DejaVu Sans Mono', monospace;
+            font-size: 17px;
+            color: #ffffff;
+            border-radius: 12px;
+            border: 2px;
+            border-color: transparent;
+            border-style: solid;
+            width: 450px;
+            padding: 3px 5px;
+        }
+
+        .bio {
+            font-family: 'DejaVu Sans Mono', monospace;
+            font-size: 17px;
+            color: #ffffff;
+            position: relative;
+            top:-40%;
+            left: 31.25%;
+            width: 55%;
+            padding: 3px 5px;
+            border-radius: 12px;
+            border: 2px;
+            border-color: rgb(1, 1, 31);
+            border-style: solid;
+            max-height: 90px; /* Set maximum height */
+            overflow: hidden;
+            resize: none;
+        }
+
+        .edit-btn-username {
+            background-color: transparent;
+            position: absolute;
+            color: #fbbc04;
+            top: 62px;
+            left: 255px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .edit-btn-bio {
+            background-color: transparent;
+            position: absolute;
+            color: #fbbc04;
+            top: 100px;
+            left: 255px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .edit-btn-username:hover {
+            transform: scale(1.2); /* Slight zoom on hover */
+        }
+
+        .edit-btn-bio:hover {
+            transform: scale(1.2); /* Slight zoom on hover */
+        }
+
+        .bio[contenteditable="true"] {
+            border-color:#ffffff;
+        }
+
+        .username[contenteditable="true"] {
+            border-color:#ffffff;
+        }
+
+        .delete-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 120px;
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            padding: 10px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 160px;
+        }
+
+        .delete-btn:hover {
+            background-color: #cc0000; /* Darker shade of red */
+            transform: scale(1.1); /* Slightly enlarge the button */
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 120px;
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            padding: 10px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 160px;
+        }
+
+        .logout-btn:hover {
+            background-color: #cc0000; /* Darker shade of red */
+            transform: scale(1.1); /* Slightly enlarge the button */
+        }
+
+        .password-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 370px;
+            width: 160px;
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            padding: 10px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .password-btn:hover {
+            background-color: #cc0000; /* Darker shade of red */
+            transform: scale(1.1); /* Slightly enlarge the button */
+        }
+
+        .interests {
+            position: fixed;
+            top: 315px;
+            left: 480px;
+            color: #ffffff;
+        }
+
+        .subjects {
+            position: fixed;
+            top: 280px;
+            left: 480px;
+            color: #ffffff;
+        }
+
+        .subjects ul {
+            list-style-type: none;
+            display: flex;  /* Use flexbox to display items in a row */
+            gap: 10px;  /* Space between each item */
+        }
+
+        .subjects li {
+            font-family: 'DejaVu Sans Mono', monospace;
+            font-size: 14px;
+            border-radius: 10px;
+            border-color: #9B59B6;
+            border-style: outset; /* Set border style */
+            border-width: 2px;
+            padding: 2px 5px;
+            color: #ffffff;
+            display: inline-block; /* Ensures items are inline */
+        }
+
+        .interests ul {
+            list-style-type: none;
+            display: flex;  /* Use flexbox to display items in a row */
+            gap: 10px;  /* Space between each item */
+        }
+
+        .interests li {
+            font-family: 'DejaVu Sans Mono', monospace;
+            font-size: 14px;
+            border-radius: 10px;
+            border-color: #4CAF50;
+            border-style: outset; /* Set border style */
+            border-width: 2px;
+            padding: 2px 5px;
+            color: #ffffff;
+            display: inline-block; /* Ensures items are inline */
+        }
+
+        .search-container{
+            position: absolute;
+            width: 87.5%;
+            top: 5%;
+            left: 45px;
+            transition: all 0.4s ease;
+        }
+
+        .search-bar {
+            width:98%;
+            height: 5%; /* Adjusted for a more balanced look */
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-color: white;
+            border-radius: 25px; /* Rounded corners for a modern look */
+            outline: none;
+            background-color: black; /* Light background for the search bar */
+            color: #333; /* Darker text for contrast */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+            transition: all 0.4s ease; /* Smoother transitions for interactive effects */
+        }
+
+        .search-container.fullscreen {
+            position: absolute;
+            top: -260px;
+            left: 35px;
+            width: 87.5%;
+            height: 485px;
+            font-size: 24px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            z-index: 10;
+            border: none;
+        }
+
+        .search-bar.fullscreen {
+            border-width: 1px;
+            border-color: #007bff; /* Highlight border on focus */
+            background-color: #fff; /* Lighter background when focused */
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+            width:96.5%;
+            height:5%;
+            transition: all 0.4s ease;
+        }
+
+        /* Search Back Button */
+        .search-back {
+            display: none;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 18px;
+            background-color: #000;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: background-color 0.4s;
+            z-index: 11;
+            border: none;
+            border-radius: 15px;
+        }
+        
+        .search-back:hover {
+            background-color: rgb(1, 13, 53);  /* Darker shade of blue on hover */
+            transform: scale(1.05);  /* Slightly enlarge the button */
+        }
+
+        .search-back.active {
+            display: block;
+        }
+
+        .search-dropdown {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 80px; /* Adjust to position below the search bar */
+            left: 3%;
+            width: 94.5%;
+            height: 380px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 12;
+            overflow-y: auto;
+        }
+
+        .search-dropdown ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .search-dropdown li {
+            padding: 10px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            display: flex; 
+            align-items: center;
+            gap: 10px; 
+        }
+
+        .search-dropdown li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .custom-icon {
+            font-size: 20px;
+            color: #0c1fc9;
+            position: absolute;
+            top: 1px;
+            right: -18px;
+            border: 2px solid white;
+            padding: 10px;
+            border-radius: 25px;
+            background-color: black;
+        }
+
+        .custom-icon.fullscreen {
+            font-size: 24px;
+            color: #007bff;
+            position: absolute;
+            top: 20px;
+            right: 16px;
+            border: 1px solid #007bff;
+            padding: 12px;
+            border-radius: 25px;
+            background-color: #fff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+        }
+
+        .custom-icon.fullscreen:hover {
+            background-color: #f0f0f0;                /* Change the color on hover */
+        }
+
+        .friend-btn {
+            position: absolute;
+            right: 14px;
+            border: 2px solid #007bff;
+            background: none;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .friend-btn-add {
+            position: absolute;
+            right: 14px;
+            border: 2px solid #007bff;
+            background: none;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .friend-btn-pending {
+            position: absolute;
+            right: 14px;
+            border-radius: 15px;
+            background-color: gray;
+            color: white;
+            cursor: not-allowed;
+            border: 2px solid gray;
+        }
+
+        .user-scroll-container {
+            margin-top: 30px;
+            color: white;
+        }
+
+        .user-scroll-container {
+            position: absolute;
+            bottom: 62px;
+            left: 75px;
+            width: 740px;
+            color: white;
+        }
+
+        .user-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #888 transparent;
+        }
+
+        .user-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .user-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .user-card {
+            flex: 0 0 auto;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 10px;
+            width: 150px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: scale(1.05);
+        }
+
+        .user-card img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: rgb(255, 255, 255);
+        }
+
+        .user-username {
+            font-size: 12px;
+            color: #7dd3fc;
+        }
+
+        .user-friend-btn {
+            margin-top: 8px;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 15px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .user-friend-btn:hover:not(:disabled) {
+            background-color: #0069d9;
+            transform: scale(1.05);
+        }
+
+        .user-friend-btn:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+            /* Timetable Button Styles */
+        .timetable-btn {
+            position: fixed;
+            top: 125px;
+            right: 285px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #121212;
+            color: white;
+            border: 2px solid #007BFF;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .timetable-btn:hover {
+            background-color: #007BFF;
+            transform: scale(1.1);
+        }
+
+        /* Timetable Popup Styles */
+        .timetable-popup {
+            display: none;
+            position: fixed;
+            top: 150px;
+            right: 500px;
+            width: 350px;
+            background-color: #121212;
+            border: 2px solid #007BFF;
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 101;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .timetable-content {
+            position: relative;
+            color: white;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: #ff0000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timetable-content h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .timetable-block {
+            background-color: #1a1a2e;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .free-block {
+            opacity: 0.7;
+        }
+
+        .block-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #007BFF;
+        }
+
+        .block-content {
+            font-size: 14px;
+        }
+
+        /* Password Change Popup Styles */
+        .password-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background-color: #121212;
+            border: 2px solid #007BFF;
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .password-content {
+            position: relative;
+            color: white;
+        }
+
+        .password-close-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: #ff0000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-content h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+
+        .password-input-group {
+            margin-bottom: 15px;
+        }
+
+        .password-input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .password-input-group input {
+            width: 95%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #1a1a2e;
+            color: white;
+        }
+
+        .password-submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .password-submit-btn:hover {
+            background-color: #0069d9;
+        }
+
+        .password-error {
+            color: #ff4444;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Left: Website Name -->
+        <div class="website-name">UniVerse</div>
+
+        <!-- Center: Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="/chats" class="nav-tab">Chats</a>
+            <a href="/flashcard" class="nav-tab">Flashcard</a>
+            <a href="/classes" class="nav-tab">Classes</a>
+        </nav>
+
+        <!-- Right: Profile Picture -->
+        <div class="profile" onclick="window.location.href='/account'">
+            <img src="{% static 'UniVerse/face.png' %}"> <!-- Replace with your image URL -->
+        </div>
+
+    </header>
+
+    <main>
+
+        <div class="mainBox">
+
+            <div class="account-section">
+
+                <!-- Profile picture section -->
+                <div class="pfp">
+                    <img src={{ profile_picture }}>
+                </div>
+                
+                <!-- Profile picture upload form (hidden input for file upload) -->
+                <form method="post" enctype="multipart/form-data"></form>
+                    <input type="file" id="profilePictureInput" name="profile_picture" accept="image/*", style="display: none;">
+
+                    <!-- This label becomes the button -->
+                    <label for="profilePictureInput" class="pfp-button">Edit Profile Picture</label>    
+                </form> 
+                
+                <!-- Display name -->
+                <div class="name">Name: {{ me.first_name }} {{ me.last_name }}</div>
+
+                <!-- Display and edit username -->
+                <div class="username" contenteditable="false" >Username: {{ me.username }}</div>
+                <button class="edit-btn-username" 
+                    onclick="toggleEdit(document.querySelector('.username'), document.querySelector('.edit-btn-username'))">&#9998;
+                </button>
+
+                <!-- Display and edit bio -->
+                <div class="bio" contenteditable="false">
+                    {{ me_profile.bio|linebreaksbr }}
+                </div>
+                <button class="edit-btn-bio" 
+                    onclick="toggleEdit(document.querySelector('.bio'), document.querySelector('.edit-btn-bio'))">&#9998;
+                </button>
+
+                <!-- Display user interests -->
+                <div class="interests">
+                    <ul>
+                        {% for interest in me_profile.interests %}
+                            <li>{{ interest }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Display user subjects -->
+                <div class="subjects">
+                    <ul>
+                        {% for subject in me_profile.subjects.all %}
+                            <li>{{ subject.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="friend-suggestion">
+
+                <!-- Search bar container for searching users -->
+                <div class="search-container">
+                    
+                    <!-- Input field for searching users, calls expandSearch() when clicked -->
+                    <input 
+                        type="text" 
+                        class="search-bar" 
+                        placeholder="Search users" 
+                        onclick="expandSearch()"
+                    />
+
+                    <i class="fa fa-search custom-icon" onclick="searchUsers()"></i>
+
+                    <!-- Dropdown list displaying search results -->
+                    <div class="search-dropdown">
+                        <ul>
+                            {% for person in users %}
+                                {% if person.first_name != "" and person.first_name != me.first_name %}
+                                    <li>
+                                        <img 
+                                            src="{% static 'UniVerse/face.png' %}" 
+                                            alt="User Profile Picture" 
+                                            style="width: 35px; height: 35px; border-radius: 50%;"
+                                        >
+                                        <div>
+                                            <span style="font-weight: bold;">{{ person.first_name }} {{ person.last_name }}</span>
+                                            <br>
+                                            <span style="color: #666;">{{ person.username }}</span>
+                                        </div>
+                                        
+                                        {% if person.userprofile in me_profile.friends.all %}
+                                            <button class="friend-btn">✓</button>
+                                        {% else %}
+                                            <button class="friend-btn-add" onclick="friendRequest('{{ person.username }}', this)">+</button>
+                                        {% endif %}
+                                        
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>                    
+                    <!-- Back button to collapse the search dropdown -->
+                    <button class="search-back" onclick="collapseSearch()">Back</button>
+
+                </div>    
+            </div>
+
+            <!-- Section displaying sorted user suggestions -->
+            <div class="user-scroll-container">
+                <div class="user-scroll">
+                    {% for person in sorted_users %}
+                        <div class="user-card">
+                            <!-- User details -->
+                            <img src="{% static 'UniVerse/face.png' %}" alt="User Pic">
+                            <div class="user-name">{{ person.first_name }} {{ person.last_name }}</div>
+                            <div class="user-username">@{{ person.username }}</div>
+
+                            <!-- Button to send a friend request -->
+                            <button class="user-friend-btn" onclick="friendRequest('{{ person.username }}', this)">
+                                Add User +
+                            </button>
+                          
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Options for account management -->
+            <div class="options">
+
+                <!-- Form to delete account, POST method -->
+                <form method="POST" action="{% url 'delete_account' %}">
+                    {% csrf_token %}
+                    <button class="delete-btn">Delete Account</button>
+                </form>
+
+                <!-- Button to change password -->
+                <button class="password-btn" onclick="togglePasswordPopup()">Change Password</button>
+
+                <!-- Form to log out the user -->
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="logout-btn">Logout</button>
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- Button to trigger the timetable popup -->
+        <button class="timetable-btn" onclick="toggleTimetable()">📅</button>
+
+        <!-- Timetable popup container, initially hidden -->
+        <div class="timetable-popup" id="timetablePopup">
+            <div class="timetable-content">
+                <!-- Close button to hide the popup -->
+                <span class="close-btn" onclick="toggleTimetable()">&times;</span>
+                
+                <h3>Your Timetable</h3>
+
+                <!-- Grid layout to display each timetable block and lesson -->
+                <div class="timetable-grid">
+                    {% for lesson in timetable %}
+                        <div class="timetable-block">{{ lesson.block }} : {{ lesson.lesson }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Password Change Popup -->
+        <div class="password-popup" id="passwordPopup">
+            <div class="password-content">
+                <span class="password-close-btn" onclick="togglePasswordPopup()">&times;</span>
+                <h3>Change Password</h3>
+                <form id="passwordChangeForm">
+                    <div class="password-input-group">
+                        <label for="newPassword1">New Password</label>
+                        <input type="password" id="newPassword1" required>
+                    </div>
+                    <div class="password-input-group">
+                        <label for="newPassword2">Confirm New Password</label>
+                        <input type="password" id="newPassword2" required>
+                    </div>
+                    <div class="password-error" id="passwordError">
+                        Passwords don't match!
+                    </div>
+                    <button type="button" class="password-submit-btn" onclick="submitPasswordChange()">Change Password</button>
+                </form>
+            </div>
+        </div>
+    
+    </main>    
+
+    <script>
+
+        // Function to toggle the password change popup
+        function togglePasswordPopup() {
+            const popup = document.getElementById('passwordPopup');
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+                // Clear fields when closing
+                document.getElementById('newPassword1').value = '';
+                document.getElementById('newPassword2').value = '';
+                document.getElementById('passwordError').style.display = 'none';
+            } else {
+                popup.style.display = 'block';
+            }
+        }
+
+
+        function submitPasswordChange() {
+            const password1 = document.getElementById('newPassword1').value;
+            const password2 = document.getElementById('newPassword2').value;
+            const errorElement = document.getElementById('passwordError');
+            
+            // Check if password confirmation matches with original
+            if (password1 !== password2) {
+                alert("Passwords do not match!");
+            }
+
+            // Password length must be greater than 7
+            if (password1.length < 7) {
+                alert("Password must be at least 7 characters long!");
+            }
+
+            // Check for at least one special character
+            const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+            if (!specialCharRegex.test(password1)) {
+                alert("Password must contain at least one special character!");
+            }
+
+            // Check for at least one number
+            const digitRegex = /[0-9]/;
+            if (!digitRegex.test(password1)) {
+                alert("Password must contain at least one number!");
+            }
+            
+            // Send the new password to the server
+            fetch('change_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ 
+                    new_password: password1
+                })
+            })
+        }
+
+        // Add event listener for when a file is selected
+        document.getElementById('profilePictureInput').addEventListener('change', function () {
+            // Get the file input element
+            const fileInput = document.getElementById('profilePictureInput');
+            const formData = new FormData();
+            formData.append('profile_picture', fileInput.files[0]);
+            
+            // Send the file to the server using fetch
+            fetch('edit_profile_picture', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'  // CSRF token is still needed
+                },
+                body: formData  // Send FormData directly
+            })
+        });
+
+        function toggleTimetable() {
+                const popup = document.getElementById('timetablePopup');
+                if (popup.style.display === 'block') {
+                    popup.style.display = 'none';
+                } else {
+                    popup.style.display = 'block';
+                }
+            }
+
+        function toggleEdit(element, button) {
+            const isEditable = element.getAttribute('contenteditable') === 'true';
+
+            if (isEditable) {
+                // Turn off edit mode
+                element.setAttribute('contenteditable', 'false');
+                element.style.outline = 'none';
+
+                if (element.classList.contains('username')) {
+                    saveUsername(element.innerText);
+                }
+                else if (element.classList.contains('bio')) {
+                    saveBio(element.innerText);
+                }
+
+                // Change to pencil icon
+                button.innerHTML = '&#9998;';  // Pencil
+            } else {
+                // Turn on edit mode
+                element.setAttribute('contenteditable', 'true');
+                element.focus(); // Focus for immediate editing
+                // Change to tick icon
+                button.innerHTML = '&#10004;';  // Tick (✔️)
+            }
+        }
+
+        function saveUsername(newUsername) {
+            // calling change username function
+            fetch('change_username', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // If you're using Django
+                },
+
+                body: JSON.stringify({ username: newUsername })
+            })
+        }
+
+        function saveBio(newBio) {
+            // calling change biography function
+            fetch('change_bio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // If you're using Django
+                },
+
+                body: JSON.stringify({ bio: newBio })
+            })
+        }
+
+        const searchContainer = document.querySelector('.search-container');
+        const searchBar = document.querySelector('.search-bar');
+        const backButton = document.querySelector('.search-back');
+        const searchDropdown = document.querySelector('.search-dropdown');
+        const customIcon = document.querySelector('.custom-icon');
+
+        function expandSearch() {
+            searchBar.classList.add('fullscreen');
+            searchContainer.classList.add('fullscreen');
+            backButton.classList.add('active');
+            customIcon.classList.add('fullscreen');
+            searchDropdown.style.display = 'block';
+        }
+
+        function collapseSearch() {
+            searchContainer.classList.remove('fullscreen');
+            searchBar.classList.remove('fullscreen');
+            backButton.classList.remove('active');
+            customIcon.classList.remove('fullscreen');
+            searchDropdown.style.display = 'none';
+        }
+
+        function friendRequest(newfriend, buttonElement) {
+            buttonElement.innerText = "Pending";
+            buttonElement.classList.add('friend-btn-pending');  // Add a pending state class
+            buttonElement.classList.remove('friend-btn-add');   // Remove the add friend style
+            buttonElement.disabled = true; // Disable the button to prevent multiple clicks
+            
+            // calling friend request function
+            fetch('friend_request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // If you're using Django
+                },
+
+                body: JSON.stringify({ username: newfriend })
+                
+            })
+        }
+
+    </script>
+
+</body>
+</html>
+
+

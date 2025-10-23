@@ -1,0 +1,82 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main page</title>
+
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            border: 0;
+            background-color:  #121212;
+        }
+        a{
+            text-decoration: none;
+        }
+        main{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+        main h1{
+            font-size: 45px;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            text-align: center;
+            margin: 25px;
+            font-family: 'DejaVu Sans Mono', monospace;
+        }
+        main img{
+            width: 200px;
+            height: 200px;
+            margin: 25px;
+            padding: 25px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 25px;
+            box-shadow: 0 0 25px 2.5px rgb(255, 255, 255);
+        }
+
+        /* Styling for the login and sign-up buttons */
+        main div button{
+            width: 200px;
+            height: 50px;
+            margin: 25px;
+            background-color: #1b2d82;
+            border: 0;
+            border-radius: 10px;
+            color: rgb(255, 255, 255);
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        main div button:hover{
+            background-color: rgb(50, 29, 241);
+            transform: scale(1.1);
+        }
+    </style>
+
+</head>
+<body>
+
+    <main>
+
+        <!-- Website name alongside with chat application image -->
+        <h1>UniVerse</h1>
+        <img src="{% static 'UniVerse/chat.png' %}">
+
+        <!-- Login and Sign-up buttons which will redirect user to those pages-->
+        <div>
+            <a href="{% url 'login' %}"><button>Login</button></a>
+            <a href="{% url 'register' %}"><button>Sign-up</button></a>
+        </div>
+
+    </main>
+    
+</body>
+</html>
