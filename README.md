@@ -12,7 +12,8 @@ This project uses the following Python modules and libraries:
 - beautifulsoup4  
 
 Make sure these dependencies are installed before running the project.
-If i have missed any module dependencies please install using the error to identify which module.
+---
+**Note** : If i have missed any module dependencies please install using the error to identify which module.
 
 ---
 
