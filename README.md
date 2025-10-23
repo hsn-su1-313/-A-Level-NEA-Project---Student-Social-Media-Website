@@ -39,5 +39,13 @@ Open the website on a **different browser** and log in with these details:
 
 ---
 
+# To view documentation
+
+Click the raw option as file size is to big
+
+**Note** : formatting may be incorrect based on the device you are using for some reason word does this.
+
+---
+
 ## Note:  
 There may be some slight inconsistencies since this is a prototype — for example, only the **Chemistry flashcards** currently work.
